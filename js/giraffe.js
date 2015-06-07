@@ -295,9 +295,11 @@ createGraph = function(anchor, metric) {
     },
     onComplete: function(transport) {
       var detail, hover_formatter, shelving, xAxis, yAxis;
+      var time = new Rickshaw.Fixtures.Time.Local();
       graph = transport.graph;
       xAxis = new Rickshaw.Graph.Axis.Time({
-        graph: graph
+        graph: graph,
+        timeFixture: time,
       });
       xAxis.render();
       yAxis = new Rickshaw.Graph.Axis.Y({
@@ -313,7 +315,13 @@ createGraph = function(anchor, metric) {
         graph: graph,
         yFormatter: function(y) {
           return hover_formatter(y);
-        }
+        },
+        formatter: function(series, x, y) { 
+          var date = '<span class="date">' + new Date(x*1000) + '</span>'; 
+          var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>'; 
+          var content = swatch + series.name + ":&nbsp;" + parseInt(y) + '分<br>' + date; 
+          return content; 
+        },
       });
       $("" + anchor + " .legend").empty();
       this.legend = new Rickshaw.Graph.Legend({
