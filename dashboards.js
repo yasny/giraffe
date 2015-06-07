@@ -1,44 +1,44 @@
-var graphite_url = "http://localhost:18013";  // enter your graphite url, e.g. http://your.graphite.com
+var graphite_url = "http://localhost:18013";
 
 var dashboards = 
 [
-  { "name": "全体",  // give your dashboard a name (required!)
-    "refresh": 360000,  // each dashboard has its own refresh interval (in ms)
-    "metrics":  // metrics is an array of charts on the dashboard
+  { "name": "全体",
+    "refresh": 360000,
+    "metrics":
     [
       {
         "alias": "ディズニーランド",
-        "target": "aliasByNode(disney.land.*.*,2)",
+        "target": "aliasByNode(disney.land.*.*,3)",
         //"description": "Wait times (min)",  // enter your metric description here
         //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
         //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
         "colspan": 3,
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 2,  // change stroke width
-        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
         "renderer": "line",
-        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-        "null_as": 0,  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+        "unstack": true,
+        "null_as": 0,
       },
       {
         "alias": "ディズニーシー",
-        "target": "aliasByNode(disney_sea.*.*,2)",  // enter your graphite barebone target expression here
+        "target": "aliasByNode(disney_sea.*.*,2)",
         //"description": "Wait times (min)",  // enter your metric description here
         //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
         //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
         "colspan": 3,
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 3,  // change stroke width
-        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "interpolation": "linear",
+        "stroke_width": 3,
+        "stroke": true,
         "renderer": "line",
-        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+        "unstack": true,
+        "null_as": 0
       },
     ]
   },
-  { "name": "平均・傾向",  // give your dashboard a name (required!)
-    "refresh": 360000,  // each dashboard has its own refresh interval (in ms)
-    "metrics":  // metrics is an array of charts on the dashboard
+  { "name": "平均・傾向",
+    "refresh": 360000,
+    "metrics":
     [
       {
         "alias": "1日移動平均線",
@@ -79,42 +79,36 @@ var dashboards =
    [
       {
         "alias": "アドベンチャーランド",
-        "target": "aliasByNode(disney.land.adventure_land.*,2)",  // enter your graphite barebone target expression here
-        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
-        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "target": "aliasByNode(disney.land.adventure_land.*,3)",
         "colspan": 3,
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 2,  // change stroke width
-        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
         "renderer": "line",
-        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+        "unstack": true,
+        "null_as": 0
       },
       {
         "alias": "ウェスタンランド",
-        "target": "aliasByNode(disney.land.western_land.*,2)",  // enter your graphite barebone target expression here
-        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
-        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "target": "aliasByNode(disney.land.western_land.*,3)",
         "colspan": 3,
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 2,  // change stroke width
-        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
         "renderer": "line",
-        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+        "unstack": true,
+        "null_as": 0
       },
       {
         "alias": "トゥモローランド",
-        "target": "aliasByNode(disney.land.tomorrow_land.*,2)",  // enter your graphite barebone target expression here
-        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
-        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "target": "aliasByNode(disney.land.tomorrow_land.*,3)",
         "colspan": 3,
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 2,  // change stroke width
-        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
         "renderer": "line",
-        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+        "unstack": true,
+        "null_as": 0
       },
    ]
   },
