@@ -1,219 +1,155 @@
-var graphite_url = "demo";  // enter your graphite url, e.g. http://your.graphite.com
+var graphite_url = "http://localhost:18013";  // enter your graphite url, e.g. http://your.graphite.com
 
 var dashboards = 
 [
-  { "name": "Demo",  // give your dashboard a name (required!)
-    "refresh": 5000,  // each dashboard has its own refresh interval (in ms)
-    // add an (optional) dashboard description. description can be written in markdown / html.
-    "description": "#Giraffe : A [Graphite](http://graphite.wikidot.com) Dashboard with a long neck <img class='pull-right' src='img/giraffe.png' />"
-                +"\n"
-                +"\n<br/>"
-                +"\n<a class='btn btn-large btn-warning' href='https://github.com/kenhub/giraffe'><i class='icon-github icon-large'></i> View project on github</a>"
-                +"\n"
-                +"\n##More?"
-                +"\n"
-                +"\nCheck out the different dashboards for more information about riding giraffes."
-                ,
+  { "name": "全体",  // give your dashboard a name (required!)
+    "refresh": 360000,  // each dashboard has its own refresh interval (in ms)
     "metrics":  // metrics is an array of charts on the dashboard
     [
       {
-        "alias": "signups",  // display name for this metric
-        "target": "sumSeries(enter.your.graphite.metrics.here)",  // enter your graphite barebone target expression here
-        "description": "New signups to the website",  // enter your metric description here
-        "summary": "sum",  // available options: [sum|min|max|avg|last|<function>]
-        "summary_formatter": d3.format(",f") // customize your summary format function. see d3 formatting docs for more options
-        // also supported are tick_formatter to customize y axis ticks, and totals_formatter to format the values in the legend
+        "alias": "ディズニーランド",
+        "target": "aliasByNode(disney.land.*.*,2)",
+        //"description": "Wait times (min)",  // enter your metric description here
+        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
+        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 3,
+        "interpolation": "linear",  // you can use different rickshaw interpolation values
+        "stroke_width": 2,  // change stroke width
+        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "renderer": "line",
+        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
+        "null_as": 0,  // null values are normally ignored, but you can convert null to a specific value (usually zero)
       },
       {
-        "alias": "signup breakdown",
-        "targets": ["sumSeries(enter.your.graphite.metrics.here)",  // targets array is also supported
-                    "sumSeries(enter.another.graphite.metrics)"],   // see below for more advanced usage
-        "description": "signup breakdown based on site location",
-        "renderer": "area",  // use any rickshaw-supported renderer
-        "unstack": true  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
-      },
-      {
-        "alias": "Registration breakdown",
-        "target": "sumSeries(enter.your.graphite.metrics.here)", 
-        // target can use a javascript function. This allows using dynamic parameters (e.g. period). See a few functions
-        // at the bottom of this file.
-        "target": function() { return 'summarize(events.registration.success,"' + entire_period() + 'min)' },
-        "renderer": "bar",
-        "description": "Registrations based on channel",
-        "hover_formatter": d3.format("03.6g"),  // customize your hover format
+        "alias": "ディズニーシー",
+        "target": "aliasByNode(disney_sea.*.*,2)",  // enter your graphite barebone target expression here
+        //"description": "Wait times (min)",  // enter your metric description here
+        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
+        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 3,
+        "interpolation": "linear",  // you can use different rickshaw interpolation values
+        "stroke_width": 3,  // change stroke width
+        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "renderer": "line",
+        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
         "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
       },
     ]
   },
-  { "name": "Visuals",
-    "refresh": 10000,
-    // you can use any rickshaw supported color scheme.
-    // Enter palette name as string, or an array of colors
-    // (see var scheme at the bottom).
-    // Schemes can be configured globally (see below), per-dashboard, or per-metric
-    "scheme": "classic9",   // this is a dashboard-specific color palette
-    "description": "#Visual settings <img class='pull-right' src='img/giraffe.png' />"
-                +"\n"
-                +"\nGiraffe is using the [Rickshaw](http://code.shutterstock.com/rickshaw/) d3 charting library."
-                +"\nYou can therefore configure almost any visual aspect supported by rickshaw/d3 inside giraffe."
-                +"\n"
-                +"\nThis includes: [color scheme](https://github.com/shutterstock/rickshaw#rickshawcolorpalette), interpolation, [renderer](https://github.com/shutterstock/rickshaw#renderer) and more."
-                +"\n"
-                +"\nEach graph can span over 1,2 or 3 columns using the `colspan` metric parameter."
-                +"\n"
-                +"\n##Top panel"
-                +"\n"
-                +"\nThe top panel allows toggling between time ranges (not visible on the demo, but should work fine with graphite)."
-                +"\nIt also supports toggling the legend <i class='icon-list-alt'></i>, grid <i class='icon-th'></i>"
-                +"\n, X labels <i class='icon-comment'></i> and tooltips <i class='icon-remove-circle'></i>"
-                +"\n"
-                +"\n##<i class='icon-list-alt'></i> Legend"
-                +"\n"
-                +"\nClicking on the legend will show the legend under each chart. The legend includes summary information for each series, "
-                +"\n &Sigma;: Total; <i class='icon-caret-down'></i>: Minimum; <i class='icon-caret-up'></i>: Maximum; and <i class='icon-sort'></i>: Average"
-                +"\n"
-                +"\n##Summary"
-                +"\n"
-                +"\nIn addition to the legend, each chart can have one `summary` value displayed next to its title."
-                +"\nThe summary is calculated over the entire series and can be one of `[sum|max|min|avg|last|<function>]`"
-                +"\n"
-                +"\n"
-                +"\n"
-                ,
-    "metrics": 
+  { "name": "平均・傾向",  // give your dashboard a name (required!)
+    "refresh": 360000,  // each dashboard has its own refresh interval (in ms)
+    "metrics":  // metrics is an array of charts on the dashboard
     [
       {
-        "alias": "network",
-        "target": "aliasByNode(derivative(servers.system.eth*),4)",
-        "events": "*",  // instead of annotator, if you use the graphite events feature
-                        // you can retrieve events matching specific tag(s) -- space separated
-                        // or use * for all tags. Note you cannot use both annotator and events.
-        "description": "main system cpu usage on production (cardinal interpolation, line renderer, colspan=3)",
-        "interpolation": "linear",
-        "colspan": 3,
-      },
-      {
-        "alias": "cpu utilization",
-        "target": "aliasByNode(derivative(servers.system.cpu.*),4)",  // target can use any graphite-supported wildcards
-        "annotator": 'events.deployment',  // a simple annotator will track a graphite event and mark it as 'deployment'.
-                                           // enter your graphite target as a string
-        "description": "cpu utilization on production (using linear interpolation). Summary displays the average across all series",
-        "interpolation": "linear",  // you can use different rickshaw interpolation values
-        "stroke_width": 1,  // change stroke width
-        "stroke": stroke,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
-        "summary": "avg",
-        "totals_fields": ["min", "max", "avg"],  // customize which totals are shown in the legend
-        "summary_formatter": format_pct,
-        "hover_formatter": format_pct,
-        "totals_formatter": format_pct,  // customize the formatting of the legend totals
-        "tick_formatter": format_pct,  // and also the y axis ticks
-      },
-      {
-        "alias": "proc mem prod",
-        "targets": ["aliasByNode(derivative(servers.system.cpu.user),4)",  // targets array can include strings, 
-                                                                           // functions or dictionaries
-                   // an example of a target object
-                    {target: 'alias(derivative(servers.system.cpu.system,"system utilization")',
-                    alias: 'system utilization',                           // this alias *must* match the graphite alias.
-                    color: '#f00'}],                                       // you can also specify a target color this way
-                                                                           // (note that these values are ignored on the demo)
-        // annotator can also be a dictionary of target and description.
-        // However, only one annotator is supported per-metric.
-        "annotator": {'target' : 'events.deployment',
-                      'description' : 'deploy'},
-        "description": "main process memory usage on production (different colour scheme and interpolation)",
-        "interpolation": "step-before",
-        "scheme": "munin",  // this is a metric-specific color palette
-      },
-      {
-        "alias": "sys mem prod",
-        "target": "aliasByNode(derivative(servers.system.cpu.*),4)",
-        "events": "*",  // instead of annotator, if you use the graphite events feature
-                        // you can retrieve events matching specific tag(s) -- space separated
-                        // or use * for all tags. Note you cannot use both annotator and events.
-        "description": "main system memory usage on production (cardinal interpolation, line renderer)",
-        "interpolation": "cardinal",
+        "alias": "1日移動平均線",
         "renderer": "line",
-        "max": 150,  // you can specify max value for the y-axis
-        "min": 20,   // and also min
+        "target": [
+          'alias(movingAverage(maxSeries(disney.sea.*.*),24),"TDS")',
+          'alias(movingAverage(maxSeries(disney.land.*.*),24),"TDL")'
+        ],
+        /*"targets": [
+          {'target': 'movingAverage(maxSeries(disney.sea.*.*),24)',
+           'color':'rgba(255,0,0,0.7)', "renderer":"area", 'alias': 'Foo'},
+          {"target": "movingAverage(maxSeries(disney.land.*.*),24)", "color": "rgba(0,255,0,0.7)","renderer":"area"},
+        ],*/
+        "description": "各時間帯の最大待ち時間を利用した1日移動平均線",
+        "colspan": 3,
+        "interpolation": "linear",
+        "unstack": true,
+        "null_as": 0,
       },
       {
-        "alias": "System Load (Multi Renderer)",
-        // an example of a multi renderer. When renderer is set to multi
-        // each target can have its own renderer. E.g. to mix between a line and bar charts.
-        "renderer": 'multi',
-        "target": "aliasByNode(derivative(servers.system.cpu.*),4)",  // target can use any graphite-supported wildcards
-        "targets": [
-            {'target': 'aliasByNode(servers.server06.system.load.load,1)',
-             'color': '#A99', 'renderer': 'bar', 'alias': 'server06'},
-            {'target':
-             'alias(movingAverage(servers.server06.system.load.load,"-5min"),' +
-             '"Moving Average of 5 segments")', 'color': '#F00',
-             'alias': 'Moving Average of 5 segments',
-             'renderer': 'line'}
+        "alias": "予測",
+        "renderer": "line",
+        "target": [
+          'alias(holtWintersForecast(maxSeries(disney.sea.*.*)),"予測値")',
+          //'holtWintersConfidenceBands(maxSeries(disney.sea.*.*))',
+          'alias(holtWintersAberration(maxSeries(disney.sea.*.*)),"予測違い")',
         ],
+        "colspan": 3,
         "interpolation": "linear",
-        "description": "multi renderer (line and bars on the same chart)",
-        "annotator": {'target' : 'events.deployment',
-                      'description' : 'deploy'},
-        "max": 150,
-        "colspan": 3
+        "unstack": true,
+        "null_as": 0,
       },
     ]
   },
-  { "name": "Setup",
-    "refresh": 10000,
-    "scheme": "colorwheel",
-    "graphite_url": "demo",  // you can override the default graphite_url with a dashboard-specific url
-    "description": "#Setup and configuration <img class='pull-right' src='img/giraffe.png' />"
-                +"\n"
-                +"\n##Installation"
-                +"\n"
-                +"\nTo install giraffe, simply [download](https://github.com/kenhub/giraffe/archive/master.zip) the code and run it from your browser."
-                +"\nYou can put it on any type of web server, and also open the `index.html` file from your local drive."
-                +"\n"
-                +"\n##Authentication"
-                +"\n"
-                +"\nGiraffe uses JSONP to retrieve the data from your graphite server. It should work out of the box, unless you"
-                +"\nhave setup authentication. Basic authentication seems to work in Firefox (it will prompt you), "
-                +"\nbut with Chrome you might need to authenticate to your graphite server first, and then access Giraffe."
-                +"\n"
-                +"\n##Configuration"
-                +"\n"
-                +"\nThe main configuration for all dashboards is found in `dashboards.js`. The file is reasonably self-explanatory, "
-                +"\nso please take a look."
-                +"\n"
-                +"\nIf you need to change the page layout, CSS, or add/remove a time period, you can also edit `index.html` and `css/main.css` file."
-                +"\n"
-                ,
+  { "name": "ディズニーランド",
+    "refresh": 360000,
     "metrics": 
-    [
+   [
       {
-        "alias": "production HTTP req",
-        "target": "aliasByNode(derivative(servers.gluteus-medius.Http.http_response_rates.*),4)",
-        "renderer": "bar",
-        "interpolation": "cardinal",
-        "summary": "last",
+        "alias": "アドベンチャーランド",
+        "target": "aliasByNode(disney.land.adventure_land.*,2)",  // enter your graphite barebone target expression here
+        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
+        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 3,
+        "interpolation": "linear",  // you can use different rickshaw interpolation values
+        "stroke_width": 2,  // change stroke width
+        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "renderer": "line",
+        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
+        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
       },
-    ]
+      {
+        "alias": "ウェスタンランド",
+        "target": "aliasByNode(disney.land.western_land.*,2)",  // enter your graphite barebone target expression here
+        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
+        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 3,
+        "interpolation": "linear",  // you can use different rickshaw interpolation values
+        "stroke_width": 2,  // change stroke width
+        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "renderer": "line",
+        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
+        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+      },
+      {
+        "alias": "トゥモローランド",
+        "target": "aliasByNode(disney.land.tomorrow_land.*,2)",  // enter your graphite barebone target expression here
+        //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
+        //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
+        "colspan": 3,
+        "interpolation": "linear",  // you can use different rickshaw interpolation values
+        "stroke_width": 2,  // change stroke width
+        "stroke": true,  // stoke may be true, false or a function that takes and returns a d3 rgb color to style the stroke
+        "renderer": "line",
+        "unstack": true,  // other parameters like unstack, interpolation, stroke, min, height are also available (see rickshaw documentation for more info)
+        "null_as": 0  // null values are normally ignored, but you can convert null to a specific value (usually zero)
+      },
+   ]
+  },
+  {"name":"About",
+   "refresh":0,
+   "description": "#東京ディズニーランド・シー待ち時間"
+     +"\n<p>当サイトは過去の1周間分（2014/11/15から）の待ち時間情報を表示する。 対象乗り物は、今現在固定である。</p>"
+     +"\n<a class='btn btn-large btn-warning' href='https://github.com/yasny/tdl-wait-time'><i class='icon-github icon-large'></i> View project on github</a>"
+     +"\n##<i class='icon-file'></i> Changelog"
+     +"\n<ul><li>2014-11-04: 最初版</li><li>2014-11-09: グラフをRickshaw.jsに変更した。</li><li>2014-11-15: バックエンドをsqliteに変更した。それから、一時間おきに自動更新にした。</li>"
+     +"<li>2014-11-16: サイトをCherryPyに変更した。最新データをデータベースから持ってくるように変更した。</li>"
+     +"<li>2014-11-18: 平均待ち時間を追加した（グラフの赤い、青い線）。平均値は0分を除き全乗り物の1時間平均</li>"
+     +"<li>2014-11-22: 過去日間分を変更できるようになった。</li>"
+     +"<li>2015-05-22: GPSチェック対応</li>"
+     +"<li>2015-05-23: バックエンドをGraphiteに切り替え、フロントエンドをGiraffeにした。</ul>",
+   "metrics": [],
   },
 ];
 
 var scheme = [
-              '#423d4f',
-              '#4a6860',
-              '#848f39',
-              '#a2b73c',
-              '#ddcb53',
-              '#c5a32f',
-              '#7d5836',
-              '#963b20',
-              '#7c2626',
-              ].reverse();
+              '#1f77b4',
+              '#ff7f0e',
+              '#2ca02c',
+              '#d62728',
+              '#9467bd',
+              '#8c564b',
+              '#e377c2',
+              '#7f7f7f',
+              '#bcbd22',
+              ];
 
 function relative_period() { return (typeof period == 'undefined') ? 1 : parseInt(period / 7) + 1; }
 function entire_period() { return (typeof period == 'undefined') ? 1 : period; }
 function at_least_a_day() { return entire_period() >= 1440 ? entire_period() : 1440; }
 
-function stroke(color) { return color.brighter().brighter() }
+//function stroke(color) { return color.brighter().brighter() }
 function format_pct(n) { return d3.format(",f")(n) + "%" }
+
