@@ -22,13 +22,13 @@ var dashboards =
       },
       {
         "alias": "ディズニーシー",
-        "target": "aliasByNode(disney_sea.*.*,2)",
+        "target": "aliasByNode(disney.sea.*.*,3)",
         //"description": "Wait times (min)",  // enter your metric description here
         //"summary": "last",  // available options: [sum|min|max|avg|last|<function>]
         //"summary_formatter": d3.format(",f"), // customize your summary format function. see d3 formatting docs for more options
         "colspan": 3,
         "interpolation": "linear",
-        "stroke_width": 3,
+        "stroke_width": 2,
         "stroke": true,
         "renderer": "line",
         "unstack": true,
@@ -102,6 +102,56 @@ var dashboards =
       {
         "alias": "トゥモローランド",
         "target": "aliasByNode(disney.land.tomorrow_land.*,3)",
+        "colspan": 3,
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
+        "renderer": "line",
+        "unstack": true,
+        "null_as": 0
+      },
+   ]
+  },
+  { "name": "ディズニーシー",
+    "refresh": 360000,
+    "metrics": 
+   [
+      {
+        "alias": "アメリカン・ウォーターフロント",
+        "target": "aliasByNode(disney.sea.american_waterfront.*,3)",
+        "colspan": 3,
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
+        "renderer": "line",
+        "unstack": true,
+        "null_as": 0
+      },
+      {
+        "alias": "ミステリアス・アイランド",
+        "target": "aliasByNode(disney.sea.mysterious_island.*,3)",
+        "colspan": 3,
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
+        "renderer": "line",
+        "unstack": true,
+        "null_as": 0
+      },
+      {
+        "alias": "ポート・ディスカバリー",
+        "target": "aliasByNode(disney.sea.port_discovery.*,3)",
+        "colspan": 3,
+        "interpolation": "linear",
+        "stroke_width": 2,
+        "stroke": true,
+        "renderer": "line",
+        "unstack": true,
+        "null_as": 0
+      },
+      {
+        "alias": "ロスト・リバー・デルタ",
+        "target": "aliasByNode(disney.sea.lost_river_delta.*,3)",
         "colspan": 3,
         "interpolation": "linear",
         "stroke_width": 2,
