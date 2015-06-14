@@ -1,6 +1,6 @@
-var graphite_url = "http://localhost:18013";
+var graphite_url = "http://localhost:8013";
 
-var dashboards = 
+var dashboards =
 [
   { "name": "全体",
     "refresh": 360000,
@@ -58,12 +58,12 @@ var dashboards =
         "unstack": true,
         "null_as": 0,
       },
+/*
       {
         "alias": "予測",
         "renderer": "line",
         "target": [
           'alias(holtWintersForecast(maxSeries(disney.sea.*.*)),"予測値")',
-          //'holtWintersConfidenceBands(maxSeries(disney.sea.*.*))',
           'alias(holtWintersAberration(maxSeries(disney.sea.*.*)),"予測違い")',
         ],
         "colspan": 3,
@@ -71,6 +71,7 @@ var dashboards =
         "unstack": true,
         "null_as": 0,
       },
+*/
     ]
   },
   { "name": "ディズニーランド",
@@ -165,15 +166,18 @@ var dashboards =
   {"name":"About",
    "refresh":0,
    "description": "#東京ディズニーランド・シー待ち時間"
-     +"\n<p>当サイトは過去の1周間分（2014/11/15から）の待ち時間情報を表示する。 対象乗り物は、今現在固定である。</p>"
-     +"\n<a class='btn btn-large btn-warning' href='https://github.com/yasny/tdl-wait-time'><i class='icon-github icon-large'></i> View project on github</a>"
+     +"\n<p>当サイトは過去の1周間分（2014/11/15から）の待ち時間情報を表示する。 対象乗り物は、サイトの担当者が好きな乗り物とした。</p>"
+     +"\n<p><strong>注意：当サイトは東京にディズニーランド、東京ディズニーシー、東京ディズニーリゾートと関係ない。</strong></p>"
+     +"\n<a class='btn btn-large btn-warning' href='https://github.com/yasny/giraffe'><i class='icon-github icon-large'></i> View frontend on github</a>"
+     +"\n<a class='btn btn-large btn-warning' href='https://github.com/yasny/disney-wait-time-spider'><i class='icon-github icon-large'></i> View spider on github</a>"
      +"\n##<i class='icon-file'></i> Changelog"
      +"\n<ul><li>2014-11-04: 最初版</li><li>2014-11-09: グラフをRickshaw.jsに変更した。</li><li>2014-11-15: バックエンドをsqliteに変更した。それから、一時間おきに自動更新にした。</li>"
      +"<li>2014-11-16: サイトをCherryPyに変更した。最新データをデータベースから持ってくるように変更した。</li>"
      +"<li>2014-11-18: 平均待ち時間を追加した（グラフの赤い、青い線）。平均値は0分を除き全乗り物の1時間平均</li>"
      +"<li>2014-11-22: 過去日間分を変更できるようになった。</li>"
      +"<li>2015-05-22: GPSチェック対応</li>"
-     +"<li>2015-05-23: バックエンドをGraphiteに切り替え、フロントエンドをGiraffeにした。</ul>",
+     +"<li>2015-05-23: バックエンドを<a href=\"https://graphite.readthedocs.org/en/latest/\">Graphite</a>に切り替え、フロントエンドを<a href=\"https://github.com/kenhub/giraffe\">Giraffe</a>のフォークにした。</li>"
+     +"<li>2015-06-14: データ取得処理を完全作りなおした。Pythonの<a href=\"http://scrapy.org/\">Scrapy</a>フレームワークを利用してスパイダーを実装した。</li></ul>",
    "metrics": [],
   },
 ];
