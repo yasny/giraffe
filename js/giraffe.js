@@ -6,7 +6,7 @@ graphite_url = graphite_url || 'demo';
 
 default_graphite_url = graphite_url;
 
-default_period = 1440;
+default_period = 10080;
 
 if (scheme === void 0) {
   scheme = 'classic9';
@@ -707,7 +707,7 @@ $('#x-item-toggle').on('click', function() {
 
 $(window).bind('hashchange', function(e) {
   var dash, timeFrame, _ref, _ref1;
-  timeFrame = ((_ref = e.getState()) != null ? _ref.timeFrame : void 0) || $(".timepanel a.range[data-timeframe='" + default_period + "']")[0].text || "1d";
+  timeFrame = ((_ref = e.getState()) != null ? _ref.timeFrame : void 0) || $(".timepanel a.range[data-timeframe='" + default_period + "']")[0].text || "1w";
   dash = (_ref1 = e.getState()) != null ? _ref1.dashboard : void 0;
   if (dash !== dashboard.name) {
     changeDashboard(dash);
